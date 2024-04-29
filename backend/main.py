@@ -1,3 +1,4 @@
+from time import sleep
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -23,6 +24,7 @@ environment = os.getenv("ENVIRONMENT", "dev")  # Default to 'development' if not
 
 if environment == "dev":
     logger = logging.getLogger("uvicorn")
+    logger.setLevel(logging.DEBUG)
     logger.warning("Running in development mode - allowing CORS for all origins")
     app.add_middleware(
         CORSMiddleware,
@@ -45,5 +47,5 @@ if __name__ == "__main__":
     app_host = os.getenv("APP_HOST", "0.0.0.0")
     app_port = int(os.getenv("APP_PORT", "8000"))
     reload = True if environment == "dev" else False
-
+    
     uvicorn.run(app="main:app", host=app_host, port=app_port, reload=reload)

@@ -12,11 +12,26 @@ services:
     ports:
       - "8000:8000"
     environment:
+      - INSTRUMENT_PHOENIX=${INSTRUMENT_PHOENIX}
+      - INSTRUMENT_ARIZE=${INSTRUMENT_ARIZE}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ARIZE_SPACE_KEY=${ARIZE_SPACE_KEY}
+      - ARIZE_API_KEY=${ARIZE_API_KEY}
+      - ARIZE_MODEL_ID=${ARIZE_MODEL_ID}
+      - ARIZE_MODEL_VERSION=${ARIZE_MODEL_VERSION}
+      - ARIZE_ENDPOINT=https://otlp.arize.com/v1
       - COLLECTOR_ENDPOINT=http://phoenix:6006/v1/traces
       - PROD_CORS_ORIGIN=http://localhost:3000
+      - ENVIRONMENT=dev
+      - TOP_K=5
     healthcheck:
-      test: ["CMD", "wget", "--spider", "http://0.0.0.0:8000/api/chat/healthcheck"]
+      test:
+        [
+          "CMD",
+          "wget",
+          "--spider",
+          "http://0.0.0.0:8000/api/chat/healthcheck"
+        ]
       interval: 5s
       timeout: 1s
       retries: 5
@@ -24,6 +39,19 @@ services:
     build: frontend
     ports:
       - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+  evaluation:
+    build: evaluation
+    ports:
+      - "5000:5000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ARIZE_SPACE_KEY=${ARIZE_SPACE_KEY}
+      - ARIZE_API_KEY=${ARIZE_API_KEY}
+      - ARIZE_MODEL_ID=${ARIZE_MODEL_ID}
+      - ARIZE_MODEL_VERSION=${ARIZE_MODEL_VERSION}
     depends_on:
       backend:
         condition: service_healthy
