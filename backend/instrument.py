@@ -41,10 +41,10 @@ def instrument_arize():
     print("🔭 OpenInference instrumentation enabled with Arize collector.")
 
 def instrument():
-    if os.getenv("INSTRUMENT_ARIZE"):
-        instrument_arize()
-    elif os.getenv("INSTRUMENT_PHOENIX"):
-        instrument_phoenix()
+    # if os.getenv("INSTRUMENT_ARIZE"):
+    #    instrument_arize()
+    # elif os.getenv("INSTRUMENT_PHOENIX"):
+    instrument_phoenix()
     
     
     

@@ -53,5 +53,4 @@ services:
       - ARIZE_MODEL_ID=${ARIZE_MODEL_ID}
       - ARIZE_MODEL_VERSION=${ARIZE_MODEL_VERSION}
     depends_on:
-      backend:
-        condition: service_healthy
+      - phoenix
